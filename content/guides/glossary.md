@@ -3,7 +3,7 @@
 
 | Term | Plain meaning |
 |---|---|
-| ARM9 / ARM7 | The DS's main and secondary processors; Driftlift translates their programs ahead of play |
+| ARM9 / ARM7 | The DS's main and secondary processors; MKDSrust translates their programs ahead of play |
 | ROM dump | A local copy of a cartridge's contents, supplied by its owner |
 | Static recompilation | Translate instructions before launch and compile the result for the host |
 | Decompilation / raising | Recover more understandable source expressions and control flow from machine-like code |

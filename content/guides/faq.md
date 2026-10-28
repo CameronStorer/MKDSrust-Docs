@@ -1,7 +1,7 @@
 # Frequently asked questions
 <!-- Start here -->
 
-## Is Driftlift an emulator?
+## Is MKDSrust an emulator?
 The normal game statically compiles CPU instructions rather than interpreting them during play. The established baseline still models DS memory, peripherals and timing. Experimental native services replace parts of that hardware model. A reference interpreter remains for tests.
 
 ## Is the source fully readable now?

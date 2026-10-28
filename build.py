@@ -40,11 +40,11 @@ def frame(title, body, active=''):
         links.append('</details>')
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{html.escape(title)} · Driftlift</title><meta name="description" content="Driftlift documentation: build and mod your own copy, study static recompilation, and follow project progress.">
+<title>{html.escape(title)} · MKDSrust</title><meta name="description" content="MKDSrust documentation: build and mod your own copy, study static recompilation, and follow project progress.">
 
 <link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
-<header><a class="brand" href="index.html"><span class="brand-name">Driftlift<b>RESEARCH &amp; NATIVE RECOMPILATION</b></span></a>
+<header><a class="brand" href="index.html"><span class="brand-name">MKDSrust<b>RESEARCH &amp; NATIVE RECOMPILATION</b></span></a>
 <nav aria-label="Primary"><a href="index.html">Overview</a><a href="guides--status.html">Project status</a><a href="functions.html">Function explorer</a>
 <a href="https://github.com/CameronStorer/MKDS-Native-Builder/tree/block4">Build it yourself ↗</a><a href="https://github.com/CameronStorer/mkds-decomp-docs">GitHub ↗</a></nav>
 <button id="menu-toggle" aria-label="Toggle documentation navigation" aria-expanded="false">☰</button></header>
@@ -123,7 +123,7 @@ def build():
         rendered = rendered.replace('<table>', '<div class="table-scroll"><table>')
         rendered = rendered.replace('</table>', '</table></div>')
         toc = f'<details class="page-toc"><summary>On this page</summary>{page_toc}</details>' if page_toc else ''
-        archive_note = '<div class="notice">Historical research snapshot. For current Driftlift progress, read <a href="guides--status.html">Project status</a>.</div>' if p['group'] == 'Research archive' else ''
+        archive_note = '<div class="notice">Historical research snapshot. For current MKDSrust progress, read <a href="guides--status.html">Project status</a>.</div>' if p['group'] == 'Research archive' else ''
         if p['group'] == 'Source reports':
             archive_note = '<div class="notice">Dated technical evidence, including planned work. Read <a href="guides--status.html">Project status</a> for the current summary.</div>'
         elif p['group'] == 'Function maps':
@@ -138,14 +138,14 @@ def build():
     counts = Counter(p['status'] for p in functions)
     counts['annotated'] = counts['known'] + counts['described']
     cards = ''.join(f'<div class="stat"><strong>{counts[s]:,}</strong><span>{label}</span></div>' for s, label in [('annotated', 'Recorded meanings'), ('inferred', 'Inferred areas'), ('sdk', 'SDK classifications'), ('unknown', 'Still unknown')])
-    overview = f'''<section class="title-screen" aria-label="Driftlift introduction"><div class="title-screen-copy"><div class="eyebrow">Driftlift / Lift the code. Keep the drift.</div>
+    overview = f'''<section class="title-screen" aria-label="MKDSrust introduction"><div class="title-screen-copy"><div class="eyebrow">MKDSrust / Lift the code. Keep the drift.</div>
 <h1>Your game.<br><span class="muted">A new way to understand it.</span></h1>
 <p class="lead">Turn your own lawful MKDS cartridge dump into a native game and a Rust source workspace. Explore how it works and how the research is checked. No ROM or game download is supplied.</p>
-<div class="hero-actions"><a class="button" href="guides--status.html">Project status</a><a class="text-link" href="guides--start.html">What is Driftlift?</a></div></div></section>
+<div class="hero-actions"><a class="button" href="guides--status.html">Project status</a><a class="text-link" href="guides--start.html">What is MKDSrust?</a></div></div></section>
 <section class="section"><h2>Choose your path</h2><div class="feature-grid">
 <a class="feature" href="guides--modders.html"><span class="feature-number">MODDERS</span><h3>Build and change your copy</h3><p>Graphical launcher, source navigation, dictionary, textures, native switches and verification.</p></a>
 <a class="feature" href="guides--pipeline.html"><span class="feature-number">RESEARCHERS</span><h3>Study the method</h3><p>Instruction lifting, IR, raised code, flag liveness, type inference and hardware replacement.</p></a>
-<a class="feature" href="guides--start.html"><span class="feature-number">GENERAL READERS</span><h3>Follow the story</h3><p>What recompilation means, why Driftlift exists, the block-by-block journey and what comes next.</p></a>
+<a class="feature" href="guides--start.html"><span class="feature-number">GENERAL READERS</span><h3>Follow the story</h3><p>What recompilation means, why MKDSrust exists, the block-by-block journey and what comes next.</p></a>
 </div></section>
 <section class="section"><h2>Current progress</h2><p>All <strong>12,736 functions</strong> have raised output. Opt-in native services now include CPU-less ARM7 sound execution; the latest budget-free acceptance measurement uses about <strong>28% less CPU per frame</strong>. Native defaults, save files, graphics fixes and readability polish remain work in progress.</p><p>These are dated measurements, not universal compatibility claims. <a href="guides--status.html">Read current status and limits</a>.</p></section>
 <section class="section"><h2>Evidence you can inspect</h2><p>The exact reference race is bit-identical after source transformations. Native race comparisons require pinned randomness, documented masks and loading offsets; menus and battle retain differences.</p><a href="guides--verify.html">How verification works</a> · <a href="guides--hardware.html">Native hardware research</a> · <a href="guides--journey.html">Timeline</a></section>

@@ -1,6 +1,6 @@
-﻿# Driftlift documentation
+﻿# MKDSrust documentation
 
-Public documentation for Driftlift, Cameron Storer's MKDS static recompilation and native-game research. The site provides three routes from its home page:
+Public documentation for MKDSrust, Cameron Storer's MKDS static recompilation and native-game research. The site provides three routes from its home page:
 
 - **Modders:** build with the graphical launcher or scripts, find generated functions and structures, use the dictionary, replace textures, choose experimental modes and verify changes.
 - **Researchers:** lifting/IR/raising, flags, type inference, hardware replacement, census findings and scoped regression proofs, with links to code on branch `block4`.
@@ -53,4 +53,4 @@ Review changes before publishing. `publish.ps1` is an existing convenience scrip
 
 No ROM data, game assets, screenshots or game text should be added. This update adds original documentation and reviewed technical prose only. The repo already contains two small legacy theme graphics documented in [assets/ATTRIBUTION.md](assets/ATTRIBUTION.md); the current site shell no longer uses them. Historical research includes an existing simulation figure.
 
-Driftlift requires the player's own lawful dump. ROM-derived generated source, extracted assets and built bundles must remain private. The reviewed main-project checkout has no top-level license declaration; do not infer redistribution rights for its tools or third-party material. This independent project is not affiliated with Nintendo.
+MKDSrust requires the player's own lawful dump. ROM-derived generated source, extracted assets and built bundles must remain private. The reviewed main-project checkout has no top-level license declaration; do not infer redistribution rights for its tools or third-party material. This independent project is not affiliated with Nintendo.
