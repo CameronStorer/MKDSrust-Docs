@@ -15,4 +15,4 @@ A **decompilation** tries to turn machine instructions back into understandable 
 ## Your copy stays yours
 You must own the game and make your own lawful dump. The project supplies tools and original research metadata, with no Nintendo code, ROM or game assets. Generated source, extracted files and built bundles are personal-use outputs and must not be redistributed. This is the project's distribution boundary, not a blanket legal ruling for every jurisdiction. MKDSrust is independent of Nintendo. The reviewed checkout has no top-level license declaration; do not infer redistribution rights for its tools.
 
-Source: [project README](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/README.md).
+Source: [project README](https://github.com/CameronStorer/MKDSrust/blob/main/README.md).

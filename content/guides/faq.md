@@ -28,4 +28,4 @@ The supported ROM is clean USA AMCE revision 0. Windows is primary; Linux has li
 ## What should a bug report include?
 OS, error text, scenario and relevant logs; the launcher saves launcher-build.log. Do not attach ROMs, assets, generated source or built games. Check [status](status.md) for known work.
 
-Sources: [README](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/README.md), [launcher](../sources/launcher.md), [defaults evidence](../sources/BLOCK5_DEFAULTS.md).
+Sources: [README](https://github.com/CameronStorer/MKDSrust/blob/main/README.md), [launcher](../sources/launcher.md), [defaults evidence](../sources/BLOCK5_DEFAULTS.md).

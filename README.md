@@ -8,13 +8,13 @@ Public documentation for MKDSrust, Cameron Storer's MKDS static recompilation an
 - **Researchers:** lifting/IR/raising, flags, type inference, hardware replacement, census findings and scoped regression proofs, with links to code on branch `block4`.
 - **General readers:** an introduction, the block-by-block journey and timeline, distribution boundaries and what comes next.
 
-[Site](https://docs.cameronstorer.com/mkds-decomp-docs/) · [Current status](content/guides/status.md) · [FAQ](content/guides/faq.md) · [Glossary](content/guides/glossary.md)
+[Site](https://docs.mkdsrust.com/) · [Current status](content/guides/status.md) · [FAQ](content/guides/faq.md) · [Glossary](content/guides/glossary.md)
 
 ## Content structure
 
 `content/guides/` contains the maintained audience guides. The first line is the Markdown title; the second line is an HTML comment naming the sidebar group (`Start here`, `Modders`, `Researchers`, or `For everyone`). Keep these two lines when editing. Sync discovers these guides without overwriting their prose; their modified dates come from the guide files.
 
-`content/sources/` contains seven allowlisted technical reports copied from the main project. These are dated evidence, including earlier results and uncompleted plan sections. The status guide explains when newer evidence supersedes an older report. GitHub code links target `CameronStorer/MKDS-Native-Builder`, branch `block4`.
+`content/sources/` contains seven allowlisted technical reports synced from `project/4_docs/`, `project/launcher/`, and the main checkout?s `dictionary/README.md`. These are dated evidence, including earlier results and uncompleted plan sections. The status guide explains when newer evidence supersedes an older report. GitHub code links target `CameronStorer/MKDSrust`, branch `main`.
 
 `content/docs/`, `content/analysis/` and `content/PROGRESS.md` retain historical research at its existing URLs. Historical pages link readers to current status. The searchable function explorer uses `content/functions.csv`: its **11,175 mapping records are distinct from the 12,736-function whole-program raised-code count**. Mapping labels are research classifications, not game completion or universal verification.
 
@@ -45,7 +45,7 @@ python -m unittest discover -s tests -v
 node tests/explorer.cjs
 ```
 
-`sync.py` only reads the project. It copies explicitly allowlisted Markdown and, when present, the mapping CSV. It normalizes local user paths and does not import new images. The native-only checkout no longer contains many legacy research documents or the old mapping export: existing site snapshots and their original dates are retained with an explicit console notice. Required current source reports must exist; missing current reports fail sync. Guides survive sync and are included in the new manifest.
+`project/` holds the developer and research material moved out of the main game repository; see [its usage guide](project/README.md). `sync.py` reads moved documents from this repository's `project/` tree, including all allowlisted `4_docs/` reports and launcher notes. `--source` selects the main checkout only for `dictionary/README.md` (default: `../../mkds-native-builder`). It never writes either source tree. Missing required source reports fail sync; historical documents not included in the move retain their snapshots and dates with a console notice. The function inventory comes from `project/4_docs/FUNCTION_TABLE.csv` if available, otherwise its reviewed snapshot is retained. Guides survive sync and are included in the new manifest. Local paths are normalized and new images are not imported.
 
 The older mapping workspace can refresh the inventory with `tools/function_map.py` and `tools/function_table.py` before sync. Do not confuse that inventory with the native generator's current counts.
 

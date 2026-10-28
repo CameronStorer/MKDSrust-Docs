@@ -27,4 +27,4 @@ Windows is the primary tested platform. Linux has a full build and 600-frame WSL
 ## Keep this page current
 Update the date and source revision, then the table and next-work list. Read newer evidence before repeating older plan status. Keep each measurement's route, mode, seed/mask conditions and limits. Sync reviewed reports, build and run tests before publishing.
 
-Evidence: [Block 4](../sources/BLOCK4_SOURCE_PLAN.md), [Block 5 plan](../sources/BLOCK5_PLAN.md), [latest defaults report](../sources/BLOCK5_DEFAULTS.md), [census](../sources/BLOCK5_CENSUS.md), [README](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/README.md), [commit history](https://github.com/CameronStorer/MKDS-Native-Builder/commits/block4/).
+Evidence: [Block 4](../sources/BLOCK4_SOURCE_PLAN.md), [Block 5 plan](../sources/BLOCK5_PLAN.md), [latest defaults report](../sources/BLOCK5_DEFAULTS.md), [census](../sources/BLOCK5_CENSUS.md), [README](https://github.com/CameronStorer/MKDSrust/blob/main/README.md), [commit history](https://github.com/CameronStorer/MKDSrust/commits/block4/).

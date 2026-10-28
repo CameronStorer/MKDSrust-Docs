@@ -42,10 +42,11 @@ class SiteTests(unittest.TestCase):
         paths = [p['path'] for p in manifest['documents']]
         self.assertEqual(len(paths), len(set(paths)))
         home = (build.OUT / 'index.html').read_text(encoding='utf-8')
-        for entry in ('modders', 'pipeline', 'start', 'status', 'glossary', 'faq'):
+        for entry in ('modders', 'pipeline', 'start', 'status', 'glossary', 'faq', 'developer-tools'):
             self.assertIn(f'guides--{entry}.html', home)
-        for path in [build.OUT / 'index.html'] + sorted(build.OUT.glob('guides--*.html')):
-            parsed = Links(path.read_text(encoding='utf-8'))
+        pages = {p: Links(p.read_text(encoding='utf-8')) for p in build.OUT.glob('*.html')}
+        for path in sorted(pages):
+            parsed = pages[path]
             self.assertEqual(len(parsed.ids), len(set(parsed.ids)), path.name)
             for href in parsed.links:
                 if '://' in href or href.startswith('mailto:'):
@@ -54,7 +55,7 @@ class SiteTests(unittest.TestCase):
                 dest = path.parent / target if target else path
                 self.assertTrue(dest.is_file(), (path.name, href))
                 if fragment:
-                    ids = Links(dest.read_text(encoding='utf-8')).ids
+                    ids = pages[dest].ids
                     self.assertIn(fragment, ids, (path.name, href))
         historical = (build.OUT / 'docs--native_build_status.html').read_text(encoding='utf-8')
         self.assertIn('Historical research snapshot', historical)
@@ -65,27 +66,37 @@ class SiteTests(unittest.TestCase):
             root = Path(temp)
             source = root / 'source'
             target = root / 'site'
-            (source / 'launcher').mkdir(parents=True)
+            (source / 'dictionary').mkdir(parents=True)
+            (target / 'project/launcher').mkdir(parents=True)
             (target / 'content/guides').mkdir(parents=True)
             (target / 'content/docs').mkdir()
-            (source / 'launcher/README.md').write_text('\ufeff# Launcher\nOriginal notes', encoding='utf-8')
+            (target / 'project/launcher/README.md').write_text('\ufeff# Launcher\nOriginal notes', encoding='utf-8')
             (target / 'content/docs/old.md').write_text('# History', encoding='utf-8')
             (target / 'content/guides/status.md').write_text('# Status\n<!-- Start here -->\n', encoding='utf-8')
             (target / 'content/functions.csv').write_text('name,status\nold,unknown\n', encoding='utf-8')
             old = {'path': 'docs/old.md', 'title': 'History', 'group': 'Start here', 'modified': '2020-01-01'}
             (target / 'content/manifest.json').write_text(json.dumps({'documents': [old]}), encoding='utf-8')
+            (source / 'dictionary/README.md').write_text('# Dictionary\nMain checkout', encoding='utf-8')
+            (source / 'launcher').mkdir()
+            (source / 'launcher/README.md').write_text('# Stale main copy', encoding='utf-8')
+            (target / 'project/4_docs').mkdir()
+            (target / 'project/4_docs/report.md').write_text('# Local report\nMoved evidence', encoding='utf-8')
+            before_project = {p.relative_to(target / 'project'): p.read_bytes() for p in (target / 'project').rglob('*') if p.is_file()}
             before = {p.relative_to(source): p.read_bytes() for p in source.rglob('*') if p.is_file()}
-            docs = [('launcher/README.md', 'sources/launcher.md', 'Launcher', 'Source reports'), ('absent.md', 'docs/old.md', 'History', 'Start here')]
+            docs = [('launcher/README.md', 'sources/launcher.md', 'Launcher', 'Source reports'), ('absent.md', 'docs/old.md', 'History', 'Start here'), ('dictionary/README.md', 'sources/dictionary.md', 'Dictionary', 'Source reports'), ('4_docs/report.md', 'sources/report.md', 'Report', 'Source reports')]
             with patch.object(sync, 'ROOT', target), patch.object(sync, 'DOCUMENTS', docs), patch.object(sys, 'argv', ['sync.py', '--source', str(source)]):
                 sync.main()
             result = json.loads((target / 'content/manifest.json').read_text(encoding='utf-8'))
             history = next(p for p in result['documents'] if p['path'] == 'docs/old.md')
             self.assertEqual(history['modified'], '2020-01-01')
             self.assertEqual(history['group'], 'Research archive')
-            self.assertEqual(len(result['documents']), 3)
+            self.assertEqual(len(result['documents']), 5)
             self.assertEqual((target / 'content/sources/launcher.md').read_text(encoding='utf-8'), '# Launcher\nOriginal notes')
+            self.assertEqual((target / 'content/sources/dictionary.md').read_text(encoding='utf-8'), '# Dictionary\nMain checkout')
             after = {p.relative_to(source): p.read_bytes() for p in source.rglob('*') if p.is_file()}
             self.assertEqual(before, after)
+            self.assertEqual((target / 'content/sources/report.md').read_text(encoding='utf-8'), '# Local report\nMoved evidence')
+            self.assertEqual(before_project, {p.relative_to(target / 'project'): p.read_bytes() for p in (target / 'project').rglob('*') if p.is_file()})
 
 
 if __name__ == '__main__':

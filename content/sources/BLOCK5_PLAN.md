@@ -15,7 +15,11 @@
 
 The [seed-equalized proof](masks/native_seed_equalized.md) (`fb7f97a`) reports equality in every unmasked region for all compared race frames: TIME **10,079/10,079**, ARM7 **10,082/10,082**, FS **10,077/10,077**, all three **10,081/10,081**, budget-free **10,078/10,078**. It uses test-only `MKDS_TICK_PIN`, a documented mask, re-keyed inputs and loading leads of 4 frames (FS/all three) or 18 (budget-free). Open-loop finishes are 11,462 (TIME/ARM7), 11,458 (FS/all three), and 11,444 (budget-free), all 1st. Without seed pinning the all-three control has 0/10,081 equal frames and does not finish. This proof covers FS/ARM7/TIME, not the separately merged SND switch.
 
-5.4 finish work remains: the proof build retains ARM7 sound CPU execution and cycle-driven hardware advancement in waits; overlay residency uses `code_epoch` dispatch/slice checks rather than the planned `FS_AfterLoadOverlay` hook. Broader corpus validation, frame-event-only advancement and default promotion remain. Native modes stay opt-in. The inventory, stage designs and effort estimates below describe the original exact baseline and plan; this status records what has landed.
+5.4 finish work remains: the proof build retains ARM7 sound CPU execution and cycle-driven hardware advancement in waits; overlay residency uses `code_epoch` dispatch/slice checks rather than the planned `FS_AfterLoadOverlay` hook. Broader corpus validation, frame-event-only advancement and default promotion remain. Native modes are now the player defaults (see follow-up below). The inventory, stage designs and effort estimates below describe the original exact baseline and plan; this status records what has landed.
+
+## Defaults follow-up (2026-10-28)
+
+Player builds now default FS/ARM7/TIME/SND to native and normal builder builds default to budget-free timing. Host-local RTC is enabled for native play; MKDS_RTC=fixed retains deterministic time. Acceptance keeps exact hardware and fixed RTC defaults; build oracle proofs with --timing exact --with-acceptance. Launcher Accuracy mode sets all four hardware switches to exact, off by default. See BLOCK5_DEFAULTS.md for finish evidence and remaining listening/corpus limits. The historical opt-in status above predates this promotion.
 
 ## Goal
 Today the translated game runs inside a cycle-counted model of the DS: `Session::step` (`2_native_game/src/session.rs`)

@@ -1,4 +1,4 @@
-# MKDS Native Launcher
+# MKDSrust launcher
 
 A graphical Windows launcher built with Rust, eframe/egui and the shared builder library. All interface text, shapes and styling are original. WheelWizard was consulted only for broad workflow ideas (setup, sidebar navigation, a prominent launch action and progress feedback); none of its implementation or assets is included.
 
@@ -19,11 +19,11 @@ Rebuild preserves the existing bundle: a nonempty destination produces a new sib
 
 Settings and Controls have explicit Save buttons and use the same `settings.txt` and `controls.txt` as the terminal launcher/game. Click a keyboard binding and press a key to replace it. Edit menus support multiple keys, clearing bindings, and keys egui cannot distinguish (modifier sides and numpad keys). Controller menus support every shared pad binding, including stick directions; physical controller capture is not provided. Display settings take effect on the next game launch.
 
-Advanced has three experimental native-mode toggles, initially off. They set `MKDS_HW_FS`, `MKDS_HW_ARM7`, and `MKDS_HW_TIME` to `native` only in the game child process; off removes inherited overrides. No global environment is changed.
+Advanced offers Accuracy mode (exact hardware), off by default. It sets MKDS_HW_FS, MKDS_HW_ARM7, MKDS_HW_TIME and MKDS_HW_SND to exact in the child process. With the option off, inherited environment overrides are preserved and player defaults are native. For the original instruction timing, build with --timing exact as well.
 
 ## Local data and checks
 
-On Windows, preferences and logs are under `%APPDATA%\MKDS Native Builder`: `launcher.json` stores ROM/output paths, experimental toggles and a source timestamp; `launcher-build.log` stores the last completed build attempt. These stay outside the repository. The header title is only displayed in memory. No ROM or extracted assets are distributed with the launcher.
+On Windows, preferences and logs are under `%APPDATA%\MKDS Native Builder`: `launcher.json` stores ROM/output paths, accuracy preference and a source timestamp; `launcher-build.log` stores the last completed build attempt. These stay outside the repository. The header title is only displayed in memory. No ROM or extracted assets are distributed with the launcher.
 
 ```powershell
 cargo test --release

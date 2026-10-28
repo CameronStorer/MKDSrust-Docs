@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-28 16:50 UTC",
+  "updated": "2026-10-28 18:28 UTC",
   "documents": [
     {
       "path": "sources/BLOCK4_SOURCE_PLAN.md",
@@ -41,7 +41,7 @@
       "path": "sources/dictionary.md",
       "title": "Dictionary reference",
       "group": "Source reports",
-      "modified": "2026-10-27"
+      "modified": "2026-10-28"
     },
     {
       "path": "docs/NATIVE_BUILD_STATUS.md",
@@ -65,7 +65,7 @@
       "path": "docs/ASSET_LAYOUT.md",
       "title": "Asset layout",
       "group": "Research archive",
-      "modified": "2026-10-27"
+      "modified": "2026-10-28"
     },
     {
       "path": "docs/GENERATOR_CONTRACT.md",
@@ -204,6 +204,12 @@
       "title": "Rust project comparison",
       "group": "Research archive",
       "modified": "2026-10-15"
+    },
+    {
+      "path": "guides/developer-tools.md",
+      "title": "Developer tools",
+      "group": "Researchers",
+      "modified": "2026-10-28"
     },
     {
       "path": "guides/faq.md",

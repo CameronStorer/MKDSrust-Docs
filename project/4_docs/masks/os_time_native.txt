@@ -1,0 +1,30 @@
+# frame_compare mask: MKDS_HW_TIME=native (Block 5.3) against the exact model. Each entry has a reason.
+# Derived from open-loop replays of the reference inputs, and checked against a control: the exact model
+# with OS_GetTick offset (MKDS_ORACLE_TICK=1:7). Every region below also differs in that control,
+# except the last group, which comes from IRQ delivery at safe points. See 4_docs/BLOCK5_PLAN.md 5.3.
+#
+# Tick-derived (virtual OS_GetTick values differ from the cycle-counted ones by design):
+region dtcm OS tick/alarm state and thread stacks holding OS_GetTick results
+region main_02160000 OS globals: tick overflow counter, alarm queue fire times
+region main_02170000 OS/game globals with OS_GetTick timestamps (5.0 tick test: first difference here)
+region main_021e0000 boot-time OS_GetTick snapshot at 0x021E772C (constant after boot)
+region main_022c0000 OS_GetTick-derived timestamps (5.0 tick test: 0x022CC610..0x022CC630)
+region main_022d0000 tick-derived timestamps beside 0x022CCxxx
+region main_022e0000 tick-derived timestamps (also in the tick control)
+region main_022f0000 tick-derived timestamps (also in the tick control)
+region main_02340000 tick-derived (also in the tick control, same frame count)
+region main_02370000 tick-derived (also in the tick control, same frame count)
+region main_023c0000 tick-derived values (also in the tick control)
+region main_023d0000 OS_GetTick-derived values (5.0 tick test: 0x023D9700..0x023D9800)
+#
+# IRQ delivery at safe points / ARM7 interleaving (not game state):
+0x023fffe0-0x023ffff0 shared cartridge/card lock words (0x027FFFE0/E8 mirror): owner at the V-blank sample depends on IRQ timing
+region pxi PXI words per logical frame: IPC replies are delivered at the next safe point, so traffic moves between adjacent frames
+region spu ARM7 SPU writes per logical frame: follow the PXI sound commands, which move with IPC delivery
+region io2d_a 2D registers at the V-blank sample: exact takes V-blank mid-update where the main loop overran; native at the next safe point
+#
+# Not masked, expected and explained instead:
+# - Lag frames while loading (logical frames sampled in only one run) and the loading-transition frames
+#   around them (main_021d0000, main_02220000, main_022a0000/022b0000, vram_*: the same data at another point of the load).
+# - The race: race setup (0x0203B6AC) seeds the race RNG from OS_GetTick, so karts, items and the race
+#   manager differ from the first race frame. The tick control diverges at the same frame in the same regions.

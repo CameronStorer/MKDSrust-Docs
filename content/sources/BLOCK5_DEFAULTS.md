@@ -3,7 +3,7 @@
 **Recommendation: yes for the hardware switches in the player builds (`play.exe` / `game.exe`), after two small
 fixes listed under "Blockers"; keep `exact` as the default of `acceptance.exe` (it is the oracle). Budget-free
 timing (`MKDS_TIMING=native`) is ready to become the build default right after, with one listening check.**
-Nothing was flipped in this lane.
+Implemented in the defaults follow-up: player hardware and builder timing default to native. Acceptance follows the build's generated timing; build the exact oracle with `--timing exact --with-acceptance`. Native RTC uses host local time, with MKDS_RTC=fixed for deterministic runs.
 
 ## What "native" means now
 | switch | native behaviour | state |
@@ -117,6 +117,8 @@ no new busy-waits: plan 5.4 condition 2 holds on all four routes.
 - `spill!/reload!` (5.5) are untouched.
 
 ## Reproduce
+
+Build the acceptance oracle with the builder's --timing exact --with-acceptance options (or set MKDS_TIMING=exact). Keep MKDS_RTC=fixed for proofs, recordings and replays. Set all four hardware switches explicitly for native comparisons.
 ```
 # exact, logging the seed ticks; then native with the log; inputs re-keyed by the load lead
 acceptance rom.nds - OUT_EX N --record OUT_EX/rec --replay inputs/mission.csv --mask masks/native_all.txt   # env MKDS_TICK_PIN=log

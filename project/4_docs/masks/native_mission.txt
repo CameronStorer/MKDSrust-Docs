@@ -1,0 +1,57 @@
+# Block 5 per-mode mask: Mission Run 1-1, seed-pinned, all native switches (see native_race.txt). Compare from
+# logical frame 1700 with the mission-load lead (--offset 4 / 28; inputs re-keyed from frame 1650).
+# Result: 3,100 / 3,100 frames equal. Same content as native_all.txt.
+#
+# frame_compare mask: MKDS_HW_FS / MKDS_HW_ARM7 / MKDS_HW_TIME = native (alone or combined) against the exact
+# model, for SEED-EQUALIZED open-loop replays of the reference inputs: both runs set MKDS_TICK_PIN (the exact run
+# =log, the native run = that log), so the OS_GetTick values that seed the race RNGs are the same
+# (os_hle::TickPin, os_hle::TICK_SEED_SITES). Pass this file to `frame_compare replay/check --mask` (range
+# entries are applied while recording). Evidence and per-switch results: native_seed_equalized.md beside this file.
+#
+# Kart entries (`kart +0xA-+0xB reason`) are offsets inside each of the 8 karts of the kart array (*0x0217ACF8,
+# 0x5A8 bytes each), resolved at every sample, so this one file serves every course and mode (race, battle,
+# mission). Per-mode differences are in native_<mode>.txt beside this file.
+#
+# --- MKDS_HW_TIME=native: everything in os_time_native.txt (tick-derived values, safe-point IRQ delivery) ---
+region dtcm OS tick/alarm state and thread stacks holding OS_GetTick results
+region main_02160000 OS globals: tick overflow counter, alarm queue fire times
+region main_02170000 OS/game globals with OS_GetTick timestamps; also SoundState's voice-handle pool (0x0217C7F4..), the ARM9 sound command queue (0x021732B0..) and CARD work (0x0217FA20..), see below
+region main_021e0000 boot-time OS_GetTick snapshot at 0x021E772C (constant after boot)
+region main_022c0000 OS_GetTick-derived timestamps (5.0 tick test: 0x022CC610..0x022CC630)
+region main_022d0000 tick-derived timestamps beside 0x022CCxxx
+region main_022e0000 tick-derived timestamps (also in the tick control)
+region main_022f0000 tick-derived timestamps (also in the tick control)
+region main_02340000 tick-derived (also in the tick control, same frame count)
+region main_02370000 tick-derived (also in the tick control); also the sound emitters of course objects (0x02379D2C..)
+region main_023c0000 tick-derived values (also in the tick control)
+region main_023d0000 OS_GetTick-derived values (5.0 tick test: 0x023D9700..0x023D9800); with native FS also a file read buffer (0x023D6F20..0x023D7920)
+0x023fffe0-0x023ffff0 shared cartridge/card lock words (0x027FFFE0/E8 mirror): owner at the V-blank sample depends on IRQ timing
+region pxi PXI words per logical frame: IPC replies are delivered at another point (safe points, native services), so traffic moves between adjacent frames
+region spu ARM7 SPU writes per logical frame: follow the PXI sound commands, which move with IPC delivery
+region io2d_a 2D registers at the V-blank sample: exact takes V-blank mid-update where the main loop overran; native at the next safe point
+#
+# --- MKDS_HW_FS=native: the card driver is bypassed ---
+0x02180040-0x021803c8 CARD library work (used by card_* 0x021458C4..0x021466D8): command block, 512-byte page buffer, state; native FS reads files without the card driver
+#
+# --- MKDS_HW_ARM7=native: the native RTC is a fixed clock; ARM7 interleaving ---
+0x02180488-0x02180490 ID derived from the RTC and OS_GetTick at boot (os_id_generate_from_tick_maybe 0x0215274F; copies at 0x02174F78 and 0x02175078 in main_02170000): the native RTC is a fixed clock
+0x023ffde8-0x023ffdf0 RTC date/time the ARM7 publishes (0x027FFDE8 mirror): native fixed clock vs the exact model's ARM7 RTC
+0x023fffb8-0x023fffc0 SDK lock words (0x027FFFB8 mirror): owner at the V-blank sample depends on ARM7 interleaving
+0x04000064-0x04000068 DISPCAPCNT at the V-blank sample (ARM7 native alone): its enable bit is cleared by the hardware model when the capture ends, and the ARM9 takes the V-blank IRQ at another point relative to that
+#
+# --- Sound timing (FS and ARM7 native, alone or combined): which pooled voice handle a sound uses ---
+# Each kart object starts with a sound emitter: +0 prev, +4 next, +8 owner (0x0217D008), +0xC/+0x10 first/last
+# voice handle (28-byte entries of the pool in SoundState, 0x0217C8FC..0x0217CA30), +0x14 flags|count. A handle
+# is reused when the ARM7 sound driver reports the voice done; both native switches move that report by a few
+# ARM7 bursts, so the same sounds get other handles and a voice may count as active one frame longer or
+# shorter (+0x14). Positions, physics, items and the race RNGs stay equal.
+#
+# --- Lead comparisons only (FS native and the budget-free build race ahead; frame f vs native frame f - lead) ---
+0x023ffc3c-0x023ffc40 SDK V-blank count (0x027FFC3C mirror): equal at the same logical frame by definition; differs by the lead when frames are compared with an offset
+#
+# Not masked, expected and explained instead (see native_seed_equalized.md):
+# - Loading transitions (logical frames ~1720-1977 around the race load): native loads finish earlier, so the
+#   race intro runs ahead by 1 (ARM7) to 4 (FS) logical frames. With FS native the race itself then runs 4
+#   logical frames ahead of the exact model; the replay re-keys inputs from frame 1976 by -4 and compares
+#   frame f with native frame f - 4.
+kart +0xC-+0x18 kart sound emitter voice-handle list and count: handle allocation follows ARM7 sound timing

@@ -47,7 +47,7 @@ def frame(title, body, active=''):
 <body><a class="skip" href="#main">Skip to content</a>
 <header><a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.svg" width="640" height="160" alt="MKDSrust"><span class="brand-tagline">RESEARCH &amp; NATIVE RECOMPILATION</span></a>
 <nav aria-label="Primary"><a href="index.html">Overview</a><a href="guides--status.html">Project status</a><a href="functions.html">Function explorer</a>
-<a href="https://github.com/CameronStorer/MKDS-Native-Builder/tree/block4">Build it yourself ↗</a><a href="https://github.com/CameronStorer/mkds-decomp-docs">GitHub ↗</a></nav>
+<a href="https://github.com/CameronStorer/MKDSrust">Build it yourself ↗</a><a href="https://github.com/CameronStorer/MKDSrust-Docs">GitHub ↗</a></nav>
 <button id="menu-toggle" aria-label="Toggle documentation navigation" aria-expanded="false">☰</button></header>
 <div class="layout"><aside id="sidebar"><a class="explorer-link" href="functions.html">⌕ Explore functions</a>{''.join(links)}
 <div class="snapshot">Documentation snapshot<br><strong>{html.escape(manifest['updated'])}</strong></div></aside>

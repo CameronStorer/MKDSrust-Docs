@@ -21,7 +21,7 @@ From the project root:
 .\build.bat "C:\Games\my-copy.nds"
 .\play.bat --stats
 ~~~
-Or double-click build.bat and paste your ROM path. Linux/macOS use sh build.sh and sh play.sh with their documented dependencies; Linux has limited validation and macOS remains untested. See the [upstream setup](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/README.md#requirements).
+Or double-click build.bat and paste your ROM path. Linux/macOS use sh build.sh and sh play.sh with their documented dependencies; Linux has limited validation and macOS remains untested. See the [upstream setup](https://github.com/CameronStorer/MKDSrust/blob/main/README.md#requirements).
 
 ## What was generated?
 In builds/mkds, play.exe verifies the package, game.exe is the program, assets/ holds your extracted files, source/ holds generated Rust, and manifest.json records fingerprints. Never distribute those ROM-derived outputs. Editing packaged files can fail verification.
@@ -35,4 +35,4 @@ Find structures in dictionary/structs.csv, fields in fields.csv, access sites in
 
 Next: [replace textures](textures.md), [choose native switches or Accuracy mode](modes.md), and [verify a change](verify.md).
 
-Sources: [README](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/README.md), [launcher reference](../sources/launcher.md), [dictionary reference](../sources/dictionary.md), [Block 4](../sources/BLOCK4_SOURCE_PLAN.md).
+Sources: [README](https://github.com/CameronStorer/MKDSrust/blob/main/README.md), [launcher reference](../sources/launcher.md), [dictionary reference](../sources/dictionary.md), [Block 4](../sources/BLOCK4_SOURCE_PLAN.md).

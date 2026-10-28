@@ -20,4 +20,4 @@ A key change in Block 5 is how correctness is measured. Earlier transformations 
 ## What success still means
 A complete translation is not automatically a finished decompilation. Some names remain guesses, types cover only part of the program, and ordinary function signatures and directly callable loops still need polish. Faster loading can also move screen transitions; tests must distinguish a timing difference from a gameplay error.
 
-Read [current status](status.md), [the FAQ](faq.md), or [get a build running](modders.md). Sources: [project README](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/README.md), [Block 4](../sources/BLOCK4_SOURCE_PLAN.md), [Block 5 defaults](../sources/BLOCK5_DEFAULTS.md).
+Read [current status](status.md), [the FAQ](faq.md), or [get a build running](modders.md). Sources: [project README](https://github.com/CameronStorer/MKDSrust/blob/main/README.md), [Block 4](../sources/BLOCK4_SOURCE_PLAN.md), [Block 5 defaults](../sources/BLOCK5_DEFAULTS.md).

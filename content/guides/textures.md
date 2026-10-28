@@ -11,4 +11,4 @@ The GPU renderer can dump textures from your own game and load PNG replacements.
 
 Texture dumps contain game material; do not share them. This site includes no new texture examples or screenshots. Higher resolution changes presentation, not physics. Widescreen camera changes and high-refresh interpolation remain planned.
 
-Source: [README texture workflow](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/README.md#texture-packs). Return to [modders](modders.md).
+Source: [README texture workflow](https://github.com/CameronStorer/MKDSrust/blob/main/README.md#texture-packs). Return to [modders](modders.md).

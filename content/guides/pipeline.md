@@ -28,6 +28,6 @@ Typed views over DS memory retain bus-read/write semantics while expressing stru
 All ARM9 and 1,105 ARM7 functions have research names. The latest name review changed 109 of 1,532 uncertain entries (87 confirmed, 22 reworded); that exact-suffix review excludes names containing _maybe_ elsewhere. The field review renamed 204 of 595 placeholders (58 confident, 146 uncertain). These are dated coverage measurements, not a 60% T2 completion claim.
 
 ## Read the implementation
-Browse [IR](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/2_native_game/src/ir.rs), [raised emitter](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/2_native_game/src/raise_emit.rs), [fiber runtime](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/2_native_game/src/fibered.rs) and [dictionary](https://github.com/CameronStorer/MKDS-Native-Builder/blob/block4/dictionary/). A fiber preserves a guest thread's nested calls while the host services a suspension.
+Browse [IR](https://github.com/CameronStorer/MKDSrust/blob/main/2_native_game/src/ir.rs), [raised emitter](https://github.com/CameronStorer/MKDSrust/blob/main/2_native_game/src/raise_emit.rs), [fiber runtime](https://github.com/CameronStorer/MKDSrust/blob/main/2_native_game/src/fibered.rs) and [dictionary](https://github.com/CameronStorer/MKDSrust/blob/main/dictionary/). A fiber preserves a guest thread's nested calls while the host services a suspension.
 
 Source and detailed evidence: [Block 4 report](../sources/BLOCK4_SOURCE_PLAN.md). Next: [hardware replacement](hardware.md).

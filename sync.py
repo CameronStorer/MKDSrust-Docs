@@ -7,7 +7,7 @@ import re
 import shutil
 
 ROOT = Path(__file__).resolve().parent
-# (source path in the research workspace, published path (keeps existing page URLs), title, sidebar group)
+# (source path under project/ unless in MAIN_DOCUMENTS, published path (keeps existing page URLs), title, sidebar group)
 DOCUMENTS = [
     ('4_docs/BLOCK4_SOURCE_PLAN.md', 'sources/BLOCK4_SOURCE_PLAN.md', 'Block 4 evidence', 'Source reports'),
     ('4_docs/BLOCK5_PLAN.md', 'sources/BLOCK5_PLAN.md', 'Block 5 plan and dated status', 'Source reports'),
@@ -46,9 +46,14 @@ DOCUMENTS = [
 ]
 
 
+# Only this reference is still maintained in the game checkout.
+MAIN_DOCUMENTS = {'dictionary/README.md'}
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--source', type=Path, default=ROOT.parents[1])  # website lives in <workspace>/4_docs/website
+    parser.add_argument('--source', type=Path, default=ROOT.parents[1] / 'mkds-native-builder',
+                        help='Main game checkout (for documents still maintained there)')
     args = parser.parse_args()
     source = args.source.resolve()
     target = ROOT / 'content'
@@ -56,9 +61,9 @@ def main():
     manifest = {'updated': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), 'documents': []}
     previous = {p['path']: p for p in json.loads((target / 'manifest.json').read_text(encoding='utf-8'))['documents']} if (target / 'manifest.json').exists() else {}
     for src_rel, rel, title, group in DOCUMENTS:
-        path = source / src_rel
+        path = (source if src_rel in MAIN_DOCUMENTS else ROOT / 'project') / src_rel
         if not path.exists() and not rel.startswith('sources/') and (target / rel).exists():
-            # Older research files no longer live in the native-only checkout.
+            # Historical files absent from the move retain reviewed snapshots.
             entry = dict(previous[rel])
             entry['group'] = 'Function maps' if group == 'Function maps' else 'Research archive'
             manifest['documents'].append(entry)
@@ -79,9 +84,9 @@ def main():
     for path in sorted((target / 'guides').glob('*.md')):
         title, group = path.read_text(encoding='utf-8-sig').splitlines()[0:2]
         manifest['documents'].append({'path': path.relative_to(target).as_posix(), 'title': title.removeprefix('# '), 'group': group.removeprefix('<!-- ').removesuffix(' -->'), 'modified': datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).strftime('%Y-%m-%d')})
-    # Native-only checkouts may not contain the legacy mapping export or figure.
+    # The moved material may not contain the legacy mapping export.
     # Never import new game images: retain the existing reviewed research figure.
-    inventory = source / '4_docs/FUNCTION_TABLE.csv'
+    inventory = ROOT / 'project/4_docs/FUNCTION_TABLE.csv'
     if inventory.exists():
         shutil.copyfile(inventory, target / 'functions.csv')
     elif not (target / 'functions.csv').exists():
