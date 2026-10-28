@@ -42,9 +42,10 @@ def frame(title, body, active=''):
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(title)} · MKDSrust</title><meta name="description" content="MKDSrust documentation: build and mod your own copy, study static recompilation, and follow project progress.">
 
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
 <link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
-<header><a class="brand" href="index.html"><span class="brand-name">MKDSrust<b>RESEARCH &amp; NATIVE RECOMPILATION</b></span></a>
+<header><a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.svg" width="640" height="160" alt="MKDSrust"><span class="brand-tagline">RESEARCH &amp; NATIVE RECOMPILATION</span></a>
 <nav aria-label="Primary"><a href="index.html">Overview</a><a href="guides--status.html">Project status</a><a href="functions.html">Function explorer</a>
 <a href="https://github.com/CameronStorer/MKDS-Native-Builder/tree/block4">Build it yourself ↗</a><a href="https://github.com/CameronStorer/mkds-decomp-docs">GitHub ↗</a></nav>
 <button id="menu-toggle" aria-label="Toggle documentation navigation" aria-expanded="false">☰</button></header>
@@ -138,7 +139,7 @@ def build():
     counts = Counter(p['status'] for p in functions)
     counts['annotated'] = counts['known'] + counts['described']
     cards = ''.join(f'<div class="stat"><strong>{counts[s]:,}</strong><span>{label}</span></div>' for s, label in [('annotated', 'Recorded meanings'), ('inferred', 'Inferred areas'), ('sdk', 'SDK classifications'), ('unknown', 'Still unknown')])
-    overview = f'''<section class="title-screen" aria-label="MKDSrust introduction"><div class="title-screen-copy"><div class="eyebrow">MKDSrust / Lift the code. Keep the drift.</div>
+    overview = f'''<section class="title-screen" aria-label="MKDSrust introduction"><div class="title-screen-copy"><img class="hero-logo" src="assets/logo.svg" width="640" height="160" alt="MKDSrust"><div class="eyebrow">MKDSrust / Lift the code. Keep the drift.</div>
 <h1>Your game.<br><span class="muted">A new way to understand it.</span></h1>
 <p class="lead">Turn your own lawful MKDS cartridge dump into a native game and a Rust source workspace. Explore how it works and how the research is checked. No ROM or game download is supplied.</p>
 <div class="hero-actions"><a class="button" href="guides--status.html">Project status</a><a class="text-link" href="guides--start.html">What is MKDSrust?</a></div></div></section>
