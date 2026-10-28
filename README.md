@@ -56,3 +56,11 @@ Review changes before publishing. `publish.ps1` is an existing convenience scrip
 No ROM data, game assets, screenshots or game text should be added. The site uses the owner-supplied MKDSrust wheel and Apex Trace wordmark alongside original documentation and reviewed technical prose. The repo already contains two small legacy theme graphics documented in [assets/ATTRIBUTION.md](assets/ATTRIBUTION.md); the current site shell no longer uses them. Historical research includes an existing simulation figure.
 
 MKDSrust requires the player's own lawful dump. ROM-derived generated source, extracted assets and built bundles must remain private. The reviewed main-project checkout has no top-level license declaration; do not infer redistribution rights for its tools or third-party material. This independent project is not affiliated with Nintendo.
+
+## License
+
+The documentation content (`content/` and the generated site) is licensed under
+[Creative Commons Attribution-ShareAlike 4.0 International](LICENSE) (CC BY-SA 4.0): you may share and adapt it with
+credit, and adaptations must use the same license. The site's build scripts and tests (`build.py`, `sync.py`,
+`tests/`, `publish.ps1`) are licensed under the [GNU GPL v3.0 or later](LICENSE-CODE), like MKDSrust itself.
+No Nintendo material is included; trademarks belong to their owners.
