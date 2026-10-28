@@ -1,1 +1,1 @@
-Markdown==3.11
+markdown-it-py==4.2.0

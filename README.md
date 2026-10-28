@@ -1,91 +1,56 @@
-# MKDS decompilation research
+﻿# Driftlift documentation
 
-Public documentation of Cameron Storer's Mario Kart DS research and native
-Windows Rust port. Includes progress notes, function meanings, runtime
-correlations, structure maps, state machines and animation research.
+Public documentation for Driftlift, Cameron Storer's MKDS static recompilation and native-game research. The site provides three routes from its home page:
 
-Site: [MKDS research documentation](https://docs.cameronstorer.com/mkds-decomp-docs/)
+- **Modders:** build with the graphical launcher or scripts, find generated functions and structures, use the dictionary, replace textures, choose experimental modes and verify changes.
+- **Researchers:** lifting/IR/raising, flags, type inference, hardware replacement, census findings and scoped regression proofs, with links to code on branch `block4`.
+- **General readers:** an introduction, the block-by-block journey and timeline, distribution boundaries and what comes next.
 
-The custom domain and HTTPS certificate are configured. HTTPS serving is
-verified, and GitHub Pages redirects HTTP requests to HTTPS.
+[Site](https://docs.cameronstorer.com/mkds-decomp-docs/) · [Current status](content/guides/status.md) · [FAQ](content/guides/faq.md) · [Glossary](content/guides/glossary.md)
 
-The interactive function explorer is built from the research inventory. Known,
-inferred, SDK and unknown classifications are distinct. Counts describe mapping
-coverage, not game completion or universal runtime verification.
+## Content structure
 
-## Explore the research
+`content/guides/` contains the maintained audience guides. The first line is the Markdown title; the second line is an HTML comment naming the sidebar group (`Start here`, `Modders`, `Researchers`, or `For everyone`). Keep these two lines when editing. Sync discovers these guides without overwriting their prose; their modified dates come from the guide files.
 
-- [Current progress](content/docs/NEXT_GOALS.md) and [roadmap](content/docs/ROADMAP.md).
-- [Function inventory coverage](content/docs/FUNCTION_TABLE.md),
-  [identified functions](content/docs/FUNCTION_MAP.md), and
-  [function meanings](content/docs/function_notes.md).
-- [Kart port findings](content/docs/KART_PORT.md),
-  [race logic](content/analysis/race_logic_map.md), and
-  [runtime correlations](content/analysis/kart_runtime.md).
-- [Original animation logic](content/analysis/CODEX_ANIMATION_MAP.md),
-  [joint-animation decoder](content/docs/CODEX_NSBCA_HANDOFF.md), and
-  [face-pattern decoder](content/docs/CODEX_NSBTP_HANDOFF.md).
+`content/sources/` contains seven allowlisted technical reports copied from the main project. These are dated evidence, including earlier results and uncompleted plan sections. The status guide explains when newer evidence supersedes an older report. GitHub code links target `CameronStorer/MKDS-Native-Builder`, branch `block4`.
 
-The website adds a searchable function explorer with status and subsystem
-filters, sortable column headings, and scrolling that reveals 200 rows at a
-time. A Load more button also supports keyboard navigation. Sorting and filters
-apply to the complete inventory. These documents are snapshots of the active research workspace;
-individual findings record their evidence and remaining limitations.
+`content/docs/`, `content/analysis/` and `content/PROGRESS.md` retain historical research at its existing URLs. Historical pages link readers to current status. The searchable function explorer uses `content/functions.csv`: its **11,175 mapping records are distinct from the 12,736-function whole-program raised-code count**. Mapping labels are research classifications, not game completion or universal verification.
 
-## Build locally
+`content/manifest.json` controls page titles, groups and snapshot dates. `build.py` renders Markdown using pinned markdown-it-py with tables, fenced code, heading anchors and contents lists. It writes flat HTML URLs using the original slug convention, plus CSS, JavaScript and function metadata in `_site/`.
+
+## Build and test locally
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe build.py
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+node tests/explorer.cjs
 python -m http.server 8000 --directory _site
 ```
 
-Open http://localhost:8000. The builder outputs static HTML, CSS, JavaScript and
-function metadata. GitHub Actions builds and publishes every push to `main`.
+Open http://localhost:8000. The Python tests check rendered audience navigation, local links/anchors, Markdown features and sync preservation/read-only behavior. The Node tests check explorer sorting, filters, 200-row loading and details against the complete generated inventory. GitHub Actions builds, tests and publishes pushes to `main`.
 
-After building, run `node tests/explorer.cjs` to check sorting, filters, incremental
-loading, and function details against the generated inventory.
+## Update from the main project
 
-## Update from the game research workspace
-
-When function meanings change, run these commands from the game workspace:
+Read the main project's README, the Block 4/5 status and newest defaults evidence, and recent commits before updating the authored guides. Update `content/guides/status.md` with the review date and source revision; retain each measurement's route, mode, mask/seed conditions and limits. Owner priorities may precede the technical reports; identify those separately from measured results.
 
 ```powershell
-python tools/function_map.py
-python tools/function_table.py
-```
-
-Then, from this documentation repository, publish the latest snapshot:
-
-```powershell
-.\publish.ps1 -SourceDirectory "C:\path\to\My_NDS_GAME"
-```
-
-Install `requirements.txt` first using the local build instructions above.
-`publish.ps1` synchronizes the selected documents, builds the site, commits the
-content changes, and pushes them to GitHub. GitHub Actions deploys the new site.
-It requires Python, Git, and permission to push to this repository.
-
-To review the snapshot before publishing, run:
-
-```powershell
-python sync.py --source "C:\path\to\My_NDS_GAME"
+python sync.py --source "C:\Users\cam\dev\mkds-native-builder"
 git diff -- content
+python build.py
+python -m unittest discover -s tests -v
+node tests/explorer.cjs
 ```
 
-`sync.py` copies only explicitly listed documentation, the function metadata
-CSV, and the selected research figure. Review additions to its allowlist before
-including more workspace files.
+`sync.py` only reads the project. It copies explicitly allowlisted Markdown and, when present, the mapping CSV. It normalizes local user paths and does not import new images. The native-only checkout no longer contains many legacy research documents or the old mapping export: existing site snapshots and their original dates are retained with an explicit console notice. Required current source reports must exist; missing current reports fail sync. Guides survive sync and are included in the new manifest.
 
-Local workspace changes are not automatically public. They become live after
-syncing and pushing this repository. Snapshots retain source-file names and
-update dates; references to unpublished local code are shown as local references.
+The older mapping workspace can refresh the inventory with `tools/function_map.py` and `tools/function_table.py` before sync. Do not confuse that inventory with the native generator's current counts.
+
+Review changes before publishing. `publish.ps1` is an existing convenience script that syncs, builds, commits and pushes; use the separate commands above for a local review without publishing. This task does not require a commit or push.
 
 ## Repository scope
 
-This repository contains research documentation, site tooling, and two small
-[theme graphics decoded from the game](assets/ATTRIBUTION.md). ROMs, raw game
-asset archives, extracted code binaries, decompiled source exports, save states and IDA
-databases are not included. No copyright license for third-party material is
-implied. This independent project is not affiliated with Nintendo.
+No ROM data, game assets, screenshots or game text should be added. This update adds original documentation and reviewed technical prose only. The repo already contains two small legacy theme graphics documented in [assets/ATTRIBUTION.md](assets/ATTRIBUTION.md); the current site shell no longer uses them. Historical research includes an existing simulation figure.
+
+Driftlift requires the player's own lawful dump. ROM-derived generated source, extracted assets and built bundles must remain private. The reviewed main-project checkout has no top-level license declaration; do not infer redistribution rights for its tools or third-party material. This independent project is not affiliated with Nintendo.

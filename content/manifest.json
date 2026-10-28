@@ -1,40 +1,82 @@
 {
-  "updated": "2026-10-15 18:57 UTC",
+  "updated": "2026-10-28 16:50 UTC",
   "documents": [
+    {
+      "path": "sources/BLOCK4_SOURCE_PLAN.md",
+      "title": "Block 4 evidence",
+      "group": "Source reports",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "sources/BLOCK5_PLAN.md",
+      "title": "Block 5 plan and dated status",
+      "group": "Source reports",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "sources/BLOCK5_CENSUS.md",
+      "title": "Hardware census",
+      "group": "Source reports",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "sources/BLOCK5_DEFAULTS.md",
+      "title": "Native defaults proposal",
+      "group": "Source reports",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "sources/native_seed_equalized.md",
+      "title": "Earlier seed-pinned proof",
+      "group": "Source reports",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "sources/launcher.md",
+      "title": "Launcher reference",
+      "group": "Source reports",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "sources/dictionary.md",
+      "title": "Dictionary reference",
+      "group": "Source reports",
+      "modified": "2026-10-27"
+    },
     {
       "path": "docs/NATIVE_BUILD_STATUS.md",
       "title": "Native build status",
-      "group": "Start here",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/OBJECTIVES_OWNER_PLAN.md",
       "title": "Goals and roadmap",
-      "group": "Start here",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/NATIVE_BUILD_BASELINE_AND_CONTRACT.md",
       "title": "Build history and measurements",
-      "group": "Native build",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/ASSET_LAYOUT.md",
       "title": "Asset layout",
-      "group": "Native build",
-      "modified": "2026-10-15"
+      "group": "Research archive",
+      "modified": "2026-10-27"
     },
     {
       "path": "docs/GENERATOR_CONTRACT.md",
       "title": "Code generator",
-      "group": "Native build",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/RUNTIME_CONTRACT.md",
       "title": "Runtime",
-      "group": "Native build",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
@@ -58,110 +100,176 @@
     {
       "path": "analysis/race_logic_map.md",
       "title": "Race logic",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-08"
     },
     {
       "path": "analysis/kart_struct.md",
       "title": "Kart structure",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-07"
     },
     {
       "path": "analysis/kart_runtime.md",
       "title": "Runtime correlations",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-07"
     },
     {
       "path": "analysis/kart_runtime_drift.md",
       "title": "Drift correlations",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-07"
     },
     {
       "path": "analysis/state_machines.md",
       "title": "State machines",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-07"
     },
     {
       "path": "analysis/vm_report.md",
       "title": "VM / dispatcher scan",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-07"
     },
     {
       "path": "analysis/CODEX_ANIMATION_MAP.md",
       "title": "Animation logic",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-08"
     },
     {
       "path": "analysis/CODEX_PARTICLE_MAP.md",
       "title": "Particles and fall contacts",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-10"
     },
     {
       "path": "analysis/CODEX_NPC_MAP.md",
       "title": "NPC and traffic animation",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-09"
     },
     {
       "path": "docs/CODEX_NSBCA_HANDOFF.md",
       "title": "Joint-animation decoder",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/CODEX_NSBTP_HANDOFF.md",
       "title": "Face-pattern decoder",
-      "group": "Research",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "PROGRESS.md",
       "title": "Shared progress (hand port)",
-      "group": "Hand-port archive",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/NEXT_GOALS.md",
       "title": "Hand-port goals",
-      "group": "Hand-port archive",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/ROADMAP.md",
       "title": "Hand-port roadmap",
-      "group": "Hand-port archive",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/KART_PORT.md",
       "title": "Kart port findings",
-      "group": "Hand-port archive",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/CODEX_RAINBOW_WORK_LOG.md",
       "title": "Rainbow Road movement fidelity",
-      "group": "Hand-port archive",
+      "group": "Research archive",
       "modified": "2026-10-10"
     },
     {
       "path": "docs/CODEX_ROM_BUILD_WORKFLOW.md",
       "title": "Early ROM build workflow",
-      "group": "Hand-port archive",
+      "group": "Research archive",
       "modified": "2026-10-15"
     },
     {
       "path": "docs/RUST_PROJECT_COMPARISON.md",
       "title": "Rust project comparison",
-      "group": "Hand-port archive",
+      "group": "Research archive",
       "modified": "2026-10-15"
+    },
+    {
+      "path": "guides/faq.md",
+      "title": "Frequently asked questions",
+      "group": "Start here",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/glossary.md",
+      "title": "Glossary",
+      "group": "Start here",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/hardware.md",
+      "title": "Research: replacing DS hardware services",
+      "group": "Researchers",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/journey.md",
+      "title": "The journey, block by block",
+      "group": "For everyone",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/modders.md",
+      "title": "Modders: build and explore",
+      "group": "Modders",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/modes.md",
+      "title": "Accuracy and native modes",
+      "group": "Modders",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/pipeline.md",
+      "title": "Research: from instructions to typed Rust",
+      "group": "Researchers",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/start.md",
+      "title": "Meet Driftlift",
+      "group": "For everyone",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/status.md",
+      "title": "Project status",
+      "group": "Start here",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/textures.md",
+      "title": "Replace textures locally",
+      "group": "Modders",
+      "modified": "2026-10-28"
+    },
+    {
+      "path": "guides/verify.md",
+      "title": "Verify a change: races and frame comparison",
+      "group": "Researchers",
+      "modified": "2026-10-28"
     }
   ]
 }

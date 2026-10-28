@@ -1,4 +1,4 @@
-/* Mario Kart DS title-screen colors, with quiet surfaces for the research. */
+/* Driftlift: original CSS surfaces; no game imagery needed. */
 :root {
   --paper: #f7fbff;
   --ink: #172a43;
@@ -59,8 +59,7 @@ h1, h2 { color: #172a43; }
   margin: 0 0 28px;
   border: 3px solid #fff;
   border-radius: 12px;
-  background: linear-gradient(90deg, #003d7feF 0%, #00549add 58%, #0078bf20 100%),
-    url("mkds-checkerboard.png") center / auto 100% repeat-x;
+  background: linear-gradient(120deg, #123e65, #075b75);
   box-shadow: 0 0 0 1px #9ac6eb, 0 6px 0 #d7e9f8;
 }
 .title-screen::after {
@@ -161,4 +160,4 @@ dialog::backdrop { background: #092751a6; }
 /* collapsible sidebar groups */
 .nav-group{margin:0}.nav-group>summary.nav-label{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;margin:20px 10px 6px}
 .nav-group>summary.nav-label::-webkit-details-marker{display:none}.nav-group>summary.nav-label::after{content:"+";font-size:13px}
-.nav-group[open]>summary.nav-label::after{content:"2"}
+.nav-group[open]>summary.nav-label::after{content:"-"}

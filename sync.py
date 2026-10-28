@@ -1,6 +1,5 @@
 """Copy an explicit list of research docs, not the project directory, for publication."""
 import argparse
-import csv
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -10,6 +9,13 @@ import shutil
 ROOT = Path(__file__).resolve().parent
 # (source path in the research workspace, published path (keeps existing page URLs), title, sidebar group)
 DOCUMENTS = [
+    ('4_docs/BLOCK4_SOURCE_PLAN.md', 'sources/BLOCK4_SOURCE_PLAN.md', 'Block 4 evidence', 'Source reports'),
+    ('4_docs/BLOCK5_PLAN.md', 'sources/BLOCK5_PLAN.md', 'Block 5 plan and dated status', 'Source reports'),
+    ('4_docs/BLOCK5_CENSUS.md', 'sources/BLOCK5_CENSUS.md', 'Hardware census', 'Source reports'),
+    ('4_docs/BLOCK5_DEFAULTS.md', 'sources/BLOCK5_DEFAULTS.md', 'Native defaults proposal', 'Source reports'),
+    ('4_docs/masks/native_seed_equalized.md', 'sources/native_seed_equalized.md', 'Earlier seed-pinned proof', 'Source reports'),
+    ('launcher/README.md', 'sources/launcher.md', 'Launcher reference', 'Source reports'),
+    ('dictionary/README.md', 'sources/dictionary.md', 'Dictionary reference', 'Source reports'),
     ('4_docs/NATIVE_BUILD_STATUS.md', 'docs/NATIVE_BUILD_STATUS.md', 'Native build status', 'Start here'),
     ('4_docs/OBJECTIVES_OWNER_PLAN.md', 'docs/OBJECTIVES_OWNER_PLAN.md', 'Goals and roadmap', 'Start here'),
     ('4_docs/NATIVE_BUILD_BASELINE_AND_CONTRACT.md', 'docs/NATIVE_BUILD_BASELINE_AND_CONTRACT.md', 'Build history and measurements', 'Native build'),
@@ -48,9 +54,17 @@ def main():
     target = ROOT / 'content'
     target.mkdir(exist_ok=True)
     manifest = {'updated': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), 'documents': []}
+    previous = {p['path']: p for p in json.loads((target / 'manifest.json').read_text(encoding='utf-8'))['documents']} if (target / 'manifest.json').exists() else {}
     for src_rel, rel, title, group in DOCUMENTS:
         path = source / src_rel
-        text = path.read_text(encoding='utf-8')
+        if not path.exists() and not rel.startswith('sources/') and (target / rel).exists():
+            # Older research files no longer live in the native-only checkout.
+            entry = dict(previous[rel])
+            entry['group'] = 'Function maps' if group == 'Function maps' else 'Research archive'
+            manifest['documents'].append(entry)
+            print(f'Retained historical snapshot: {rel} (source absent)')
+            continue
+        text = path.read_text(encoding='utf-8-sig')
         if not re.match(r'^#\s+\S', text.lstrip()):
             raise ValueError(f'{src_rel}: expected a Markdown title; refusing to sync')
         # Normalize machine-specific paths; never import credentials or arbitrary folders.
@@ -61,11 +75,21 @@ def main():
         dest = target / rel
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(text, encoding='utf-8')
-        manifest['documents'].append({'path': rel, 'title': title, 'group': group, 'modified': datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).strftime('%Y-%m-%d')})
-    shutil.copyfile(source / '4_docs/FUNCTION_TABLE.csv', target / 'functions.csv')
-    shutil.copyfile(source / '4_docs/figure8_simulation.png', target / 'docs/figure8_simulation.png')
+        manifest['documents'].append({'path': rel, 'title': title, 'group': group if group in ('Function maps', 'Source reports') else 'Research archive', 'modified': datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).strftime('%Y-%m-%d')})
+    for path in sorted((target / 'guides').glob('*.md')):
+        title, group = path.read_text(encoding='utf-8-sig').splitlines()[0:2]
+        manifest['documents'].append({'path': path.relative_to(target).as_posix(), 'title': title.removeprefix('# '), 'group': group.removeprefix('<!-- ').removesuffix(' -->'), 'modified': datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).strftime('%Y-%m-%d')})
+    # Native-only checkouts may not contain the legacy mapping export or figure.
+    # Never import new game images: retain the existing reviewed research figure.
+    inventory = source / '4_docs/FUNCTION_TABLE.csv'
+    if inventory.exists():
+        shutil.copyfile(inventory, target / 'functions.csv')
+    elif not (target / 'functions.csv').exists():
+        raise FileNotFoundError('No source or retained function inventory')
+    else:
+        print('Retained historical function inventory (source absent)')
     (target / 'manifest.json').write_text(json.dumps(manifest, indent=2), encoding='utf-8')
-    print(f'Synced {len(DOCUMENTS)} reviewed documentation files and function inventory')
+    print(f'Prepared {len(manifest["documents"])} documentation pages (reviewed reports, retained history and authored guides)')
 
 
 if __name__ == '__main__':

@@ -8,7 +8,8 @@ import json
 import re
 import shutil
 from urllib.parse import unquote, urlsplit
-import markdown
+from markdown_it import MarkdownIt
+import unicodedata
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / '_site'
@@ -23,9 +24,11 @@ def frame(title, body, active=''):
                 for name in ('style.css', 'theme.css', 'site.js')}
     manifest = json.loads((ROOT / 'content/manifest.json').read_text(encoding='utf-8'))
     links = []
-    # Collapsible groups: the first two are open; a group also opens when it holds the current page.
-    for group, open_default in (('Start here', True), ('Native build', True), ('Function maps', False),
-                                ('Research', False), ('Hand-port archive', False)):
+    # Audience routes first; historical material remains available at stable URLs.
+    for group, open_default in (('Start here', True), ('Modders', True),
+                                ('Researchers', False), ('For everyone', False),
+                                ('Source reports', False), ('Function maps', False),
+                                ('Research archive', False)):
         entries = [p for p in manifest['documents'] if p['group'] == group]
         if not entries:
             continue
@@ -37,19 +40,19 @@ def frame(title, body, active=''):
         links.append('</details>')
     return f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{html.escape(title)} · MKDS Research</title><meta name="description" content="A public research log of MKDS decompilation and its native Windows Rust build.">
-<link rel="icon" type="image/png" href="assets/mkds-icon.png">
+<title>{html.escape(title)} · Driftlift</title><meta name="description" content="Driftlift documentation: build and mod your own copy, study static recompilation, and follow project progress.">
+
 <link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
-<header><a class="brand" href="index.html"><img class="brand-icon" src="assets/mkds-icon.png" width="48" height="48" alt=""><span class="brand-name">MK<span class="ds">DS</span><b>DECOMPILATION RESEARCH</b></span></a>
-<nav aria-label="Primary"><a href="index.html">Overview</a><a href="functions.html">Function explorer</a>
-<a href="https://github.com/CameronStorer/mkds-native-builder">Build it yourself ↗</a><a href="https://github.com/CameronStorer/mkds-decomp-docs">GitHub ↗</a></nav>
+<header><a class="brand" href="index.html"><span class="brand-name">Driftlift<b>RESEARCH &amp; NATIVE RECOMPILATION</b></span></a>
+<nav aria-label="Primary"><a href="index.html">Overview</a><a href="guides--status.html">Project status</a><a href="functions.html">Function explorer</a>
+<a href="https://github.com/CameronStorer/MKDS-Native-Builder/tree/block4">Build it yourself ↗</a><a href="https://github.com/CameronStorer/mkds-decomp-docs">GitHub ↗</a></nav>
 <button id="menu-toggle" aria-label="Toggle documentation navigation" aria-expanded="false">☰</button></header>
 <div class="layout"><aside id="sidebar"><a class="explorer-link" href="functions.html">⌕ Explore functions</a>{''.join(links)}
 <div class="snapshot">Documentation snapshot<br><strong>{html.escape(manifest['updated'])}</strong></div></aside>
 <main id="main">{body}<footer>Independent research by Cameron Storer. Documentation of a work in progress.
 <br>Not affiliated with Nintendo. MKDS and associated names belong to their respective owners.
-<br>Title-screen checkerboard and Mario icon decoded from the original game. <a href="https://github.com/CameronStorer/mkds-decomp-docs/blob/main/assets/ATTRIBUTION.md">Visual asset sources</a>.</footer></main></div></body></html>'''
+</footer></main></div></body></html>'''
 
 
 def rewrite_links(rendered, source, documents):
@@ -73,6 +76,33 @@ def rewrite_links(rendered, source, documents):
     return re.sub(r'<a href="([^"]+)">(.*?)</a>', replace, rendered, flags=re.S)
 
 
+def render_markdown(source):
+    """Render reviewed CommonMark, tables and fenced code with stable heading links."""
+    md = MarkdownIt('commonmark', {'html': True}).enable('table')
+    tokens = md.parse(source)
+    used = set()
+    headings = []
+    for index, token in enumerate(tokens):
+        if token.type != 'heading_open':
+            continue
+        inline = tokens[index + 1]
+        label = ''.join(t.content for t in (inline.children or []) if t.type in ('text', 'code_inline'))
+        anchor = unicodedata.normalize('NFKD', label).encode('ascii', 'ignore').decode().lower()
+        anchor = re.sub(r'[^\w\s-]', '', anchor)
+        anchor = re.sub(r'[-\s]+', '-', anchor).strip('-')
+        candidate = anchor
+        suffix = 1
+        while candidate in used:
+            candidate = f'{anchor}_{suffix}'
+            suffix += 1
+        used.add(candidate)
+        token.attrSet('id', candidate)
+        if token.tag in ('h2', 'h3'):
+            headings.append(f'<li><a href="#{candidate}">{html.escape(label)}</a></li>')
+    toc = '<ul>' + ''.join(headings) + '</ul>' if headings else ''
+    return md.renderer.render(tokens, md.options, {}), toc
+
+
 def build():
     OUT.mkdir(exist_ok=True)
     (OUT / 'assets').mkdir(exist_ok=True)
@@ -87,13 +117,18 @@ def build():
         # Reviewed prose must not introduce executable markup into the public site.
         if re.search(r'<\s*(script|iframe|object|embed|style)\b|\bon\w+\s*=', source, re.I):
             raise ValueError(f'Unreviewed active markup: {p["path"]}')
-        md = markdown.Markdown(extensions=['tables', 'fenced_code', 'toc', 'sane_lists'], extension_configs={'toc': {'toc_depth': '2-3'}})
-        rendered = rewrite_links(md.convert(source), p['path'], documents)
+        rendered, page_toc = render_markdown(source)
+        rendered = rewrite_links(rendered, p['path'], documents)
         rendered = rendered.replace('src="figure8_simulation.png"', 'src="assets/figure8_simulation.png"')
-        rendered = re.sub(r'<table>', '<div class="table-scroll"><table>', rendered)
+        rendered = rendered.replace('<table>', '<div class="table-scroll"><table>')
         rendered = rendered.replace('</table>', '</table></div>')
-        toc = f'<details class="page-toc"><summary>On this page</summary>{md.toc}</details>' if md.toc_tokens else ''
-        body = f'<div class="eyebrow">{html.escape(p["group"])} / Research notes</div><div class="source-note">Source: <code>{html.escape(p["path"])}</code> · Updated {html.escape(p["modified"])}</div>{toc}<article class="prose">{rendered}</article>'
+        toc = f'<details class="page-toc"><summary>On this page</summary>{page_toc}</details>' if page_toc else ''
+        archive_note = '<div class="notice">Historical research snapshot. For current Driftlift progress, read <a href="guides--status.html">Project status</a>.</div>' if p['group'] == 'Research archive' else ''
+        if p['group'] == 'Source reports':
+            archive_note = '<div class="notice">Dated technical evidence, including planned work. Read <a href="guides--status.html">Project status</a> for the current summary.</div>'
+        elif p['group'] == 'Function maps':
+            archive_note = '<div class="notice">Historical mapping inventory. These classifications are distinct from current whole-program source coverage. See <a href="guides--status.html">Project status</a>.</div>'
+        body = f'{archive_note}<div class="eyebrow">{html.escape(p["group"])}</div><div class="source-note">Source: <code>{html.escape(p["path"])}</code> · Updated {html.escape(p["modified"])}</div>{toc}<article class="prose">{rendered}</article>'
         (OUT / slug(p['path'])).write_text(frame(p['title'], body, p['path']), encoding='utf-8')
     with (ROOT / 'content/functions.csv').open(encoding='utf-8-sig', newline='') as f:
         functions = list(csv.DictReader(f))
@@ -103,22 +138,21 @@ def build():
     counts = Counter(p['status'] for p in functions)
     counts['annotated'] = counts['known'] + counts['described']
     cards = ''.join(f'<div class="stat"><strong>{counts[s]:,}</strong><span>{label}</span></div>' for s, label in [('annotated', 'Recorded meanings'), ('inferred', 'Inferred areas'), ('sdk', 'SDK classifications'), ('unknown', 'Still unknown')])
-    overview = f'''<section class="title-screen" aria-label="MKDS research"><div class="title-screen-copy"><div class="eyebrow">MKDS / Native Windows build</div>
-<h1>Understand the original.<br><span class="muted">Build it natively.</span></h1>
-<p class="lead">An open research log: mapping the game's code, and turning a player's own ROM into a native Rust program with one command. No game data is published here.</p>
-<div class="hero-actions"><a class="button" href="{slug('docs/NATIVE_BUILD_STATUS.md')}">Native build status →</a><a class="text-link" href="https://github.com/CameronStorer/mkds-native-builder">Build it yourself ↗</a><a class="text-link" href="functions.html">Explore {len(functions):,} functions →</a></div></div><img class="title-screen-icon" src="assets/mkds-icon.png" width="96" height="96" alt=""></section>
-<section class="stats" aria-label="Function classification counts">{cards}</section>
-<p class="caption">Function classifications from the current export inventory. These are documentation counts, not a percentage of game completion. Recorded meanings include {counts['known']:,} reviewed annotations and {counts['described']:,} unverified sweep descriptions. Inferred and SDK labels also require review.</p>
-<section class="section"><div class="section-heading"><span class="eyebrow">Latest</span><h2>Block 1 complete: no interpreter in the shipped game</h2></div>
-<p>From a user's own ROM, one command unpacks the game files, translates all 11,297 listed ARM9 functions and the ARM7 program into Rust, and compiles a native program. A full race to the results screen ran 1.67 billion ARM9 instructions with none interpreted; two fresh builds produced identical source.</p>
-<a class="text-link" href="{slug('docs/NATIVE_BUILD_STATUS.md')}">Read the status and measurements →</a></section>
-<section class="section"><div class="section-heading"><span class="eyebrow">The project</span><h2>From evidence to a native build</h2></div>
-<div class="feature-grid"><a class="feature" href="{slug('docs/NATIVE_BUILD_STATUS.md')}"><span class="feature-number">01 / NATIVE BUILD</span><h3>Status and results</h3><p>What the one-command build does, what was measured, and the honest limits.</p><span>Read the status →</span></a>
-<a class="feature" href="{slug('docs/GENERATOR_CONTRACT.md')}"><span class="feature-number">02 / HOW IT WORKS</span><h3>Machine code to Rust</h3><p>Function discovery, ARM/Thumb lifting, overlays and how coverage is reported.</p><span>Read about the generator →</span></a>
-<a class="feature" href="{slug('docs/FUNCTION_MAP.md')}"><span class="feature-number">03 / CODE MAPPING</span><h3>What each routine means</h3><p>Address-based correlations, field layouts and connections to the Rust code.</p><span>Browse identified functions →</span></a>
-<a class="feature" href="{slug('analysis/race_logic_map.md')}"><span class="feature-number">04 / ORIGINAL BEHAVIOR</span><h3>Follow the game logic</h3><p>Input paths, race state and structure offsets, checked against captures of the original.</p><span>Read the research →</span></a></div></section>
-<section class="method"><div><span class="eyebrow">Verification matters</span><h2>A mapping is a claim.<br>A measurement is evidence.</h2></div><p>Every translated function is checked against a reference interpreter; builds are accepted only after a race is driven to the results screen with interpreter counters at zero. Inferred labels are kept distinct from verified behavior.</p></section>
-<div class="notice">This site publishes reviewed documentation snapshots. Changes become live after documentation is synced and pushed to the repository; it does not read the developer's PC automatically.</div>'''
+    overview = f'''<section class="title-screen" aria-label="Driftlift introduction"><div class="title-screen-copy"><div class="eyebrow">Driftlift / Lift the code. Keep the drift.</div>
+<h1>Your game.<br><span class="muted">A new way to understand it.</span></h1>
+<p class="lead">Turn your own lawful MKDS cartridge dump into a native game and a Rust source workspace. Explore how it works and how the research is checked. No ROM or game download is supplied.</p>
+<div class="hero-actions"><a class="button" href="guides--status.html">Project status</a><a class="text-link" href="guides--start.html">What is Driftlift?</a></div></div></section>
+<section class="section"><h2>Choose your path</h2><div class="feature-grid">
+<a class="feature" href="guides--modders.html"><span class="feature-number">MODDERS</span><h3>Build and change your copy</h3><p>Graphical launcher, source navigation, dictionary, textures, native switches and verification.</p></a>
+<a class="feature" href="guides--pipeline.html"><span class="feature-number">RESEARCHERS</span><h3>Study the method</h3><p>Instruction lifting, IR, raised code, flag liveness, type inference and hardware replacement.</p></a>
+<a class="feature" href="guides--start.html"><span class="feature-number">GENERAL READERS</span><h3>Follow the story</h3><p>What recompilation means, why Driftlift exists, the block-by-block journey and what comes next.</p></a>
+</div></section>
+<section class="section"><h2>Current progress</h2><p>All <strong>12,736 functions</strong> have raised output. Opt-in native services now include CPU-less ARM7 sound execution; the latest budget-free acceptance measurement uses about <strong>28% less CPU per frame</strong>. Native defaults, save files, graphics fixes and readability polish remain work in progress.</p><p>These are dated measurements, not universal compatibility claims. <a href="guides--status.html">Read current status and limits</a>.</p></section>
+<section class="section"><h2>Evidence you can inspect</h2><p>The exact reference race is bit-identical after source transformations. Native race comparisons require pinned randomness, documented masks and loading offsets; menus and battle retain differences.</p><a href="guides--verify.html">How verification works</a> · <a href="guides--hardware.html">Native hardware research</a> · <a href="guides--journey.html">Timeline</a></section>
+<section class="stats" aria-label="Research inventory classifications">{cards}</section>
+<p class="caption">Historical mapping inventory, distinct from the 12,736-function whole-program raised-code count. Classifications describe annotation evidence, not game completion or universal verification. <a href="functions.html">Search {len(functions):,} records</a>.</p>
+<p><a href="guides--glossary.html">Glossary</a> · <a href="guides--faq.html">FAQ</a></p>
+<div class="notice">Use your own lawful dump. Keep ROM-derived source, assets and built games private. Independent of Nintendo. <a href="guides--start.html">Project and distribution boundaries</a>.</div>'''
     (OUT / 'index.html').write_text(frame('Overview', overview), encoding='utf-8')
     explorer = '''<div class="eyebrow">Code inventory / Search & inspect</div><h1>Function explorer</h1>
 <p class="lead">Find a routine by address, meaning, subsystem or Rust counterpart. Click a column heading to sort; click it again to reverse. Scroll to load 200 more rows.</p>
