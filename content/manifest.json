@@ -242,6 +242,12 @@
       "modified": "2026-10-28"
     },
     {
+      "path": "guides/first-mod.md",
+      "title": "Making your first mod",
+      "group": "Modders",
+      "modified": "2026-10-28"
+    },
+    {
       "path": "guides/modes.md",
       "title": "Accuracy and native modes",
       "group": "Modders",

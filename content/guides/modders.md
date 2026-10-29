@@ -33,6 +33,6 @@ Search the site's Function explorer by address, meaning or area; it is a researc
 
 Find structures in dictionary/structs.csv, fields in fields.csv, access sites in field_uses.csv and roots in globals.csv. Follow address and field-offset evidence rather than assuming a name is correct. A name ending in _maybe is uncertain. Dictionary status and confidence describe research evidence, not universal behavioral proof.
 
-Next: [replace textures](textures.md), [choose native switches or Accuracy mode](modes.md), and [verify a change](verify.md).
+Next: [make your first mod](first-mod.md), [replace textures](textures.md), [choose native switches or Accuracy mode](modes.md), and [verify a change](verify.md).
 
 Sources: [README](https://github.com/CameronStorer/MKDSrust/blob/main/README.md), [launcher reference](../sources/launcher.md), [dictionary reference](../sources/dictionary.md), [Block 4](../sources/BLOCK4_SOURCE_PLAN.md).
