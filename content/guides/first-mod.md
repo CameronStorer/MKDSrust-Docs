@@ -59,7 +59,7 @@ For a new release, raise `version` in `manifest.json` (for example `1.0.0` to `1
 
 Players install mods in three ways: **Install with MKDSrust** on a mod's page (the browser opens the launcher, which downloads, checks and installs it), dropping a mod zip onto the launcher window, or **Install .zip…** on the Mods page.
 
-All mods share **one load order**. Tick a mod to turn it on, drag it (or use ▲▼) to move it: when two mods change the same file, the one lower in the list wins. A warning on a mod shows how many files overlap with other mods, and hovering it lists which mod wins each file. The filter chips show one type at a time.
+All mods share **one load order**. Tick a mod to turn it on, drag it by its handle (or use the arrow buttons) to move it: when two mods change the same file, the one lower in the list wins. A warning on a mod shows how many files overlap with other mods, and hovering it lists which mod wins each file. The filter chips show one type at a time.
 
 ## What a package may contain
 
