@@ -104,3 +104,28 @@ if (document.querySelector("#function-search")) {
     }
   }).catch(e => { count.textContent = `${e.message}. The Markdown function map remains available in the sidebar.`; });
 }
+
+// Enhance documentation fences without changing the copied source text.
+for (const pre of document.querySelectorAll('article.prose pre')) {
+  const code = pre.querySelector('code');
+  if (!code) continue;
+  const button = document.createElement('button');
+  button.className = 'copy-code';
+  button.type = 'button';
+  button.textContent = 'Copy';
+  button.setAttribute('aria-label', 'Copy code to clipboard');
+  button.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(code.textContent);
+      button.textContent = 'Copied';
+    } catch {
+      button.textContent = 'Select code';
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      const selection = window.getSelection();
+      selection.removeAllRanges(); selection.addRange(range);
+    }
+    setTimeout(() => { button.textContent = 'Copy'; }, 2000);
+  });
+  pre.appendChild(button);
+}

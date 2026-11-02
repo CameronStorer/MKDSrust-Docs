@@ -43,17 +43,16 @@ def frame(title, body, active=''):
 <title>{html.escape(title)} · MKDSrust</title><meta name="description" content="MKDSrust documentation: build and mod your own copy, study static recompilation, and follow project progress.">
 
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
-<link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
+<link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
-<header><a class="brand" href="index.html"><img class="brand-logo" src="assets/logo.svg" width="640" height="160" alt="MKDSrust"><span class="brand-tagline">RESEARCH &amp; NATIVE RECOMPILATION</span></a>
-<nav aria-label="Primary"><a href="index.html">Overview</a><a href="guides--status.html">Project status</a><a href="functions.html">Function explorer</a>
-<a href="https://github.com/CameronStorer/MKDSrust">Build it yourself ↗</a><a href="https://github.com/CameronStorer/MKDSrust-Docs">GitHub ↗</a></nav>
-<button id="menu-toggle" aria-label="Toggle documentation navigation" aria-expanded="false">☰</button></header>
-<div class="layout"><aside id="sidebar"><a class="explorer-link" href="functions.html">⌕ Explore functions</a>{''.join(links)}
+<header><div class="header-inner"><a class="brand" href="https://mkdsrust.com" aria-label="MKDSrust home"><img src="assets/icon.png" width="30" height="30" alt=""><span class="wordmark">MKDS<span>rust</span></span></a>
+<nav aria-label="Primary"><a href="https://mkdsrust.com/download">Download</a><a href="https://mkdsrust.com/mods">Mods</a><a href="https://docs.mkdsrust.com" aria-current="page">Docs</a><a href="https://github.com/CameronStorer/MKDSrust">GitHub</a></nav>
+<button id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Docs menu</button></div></header>
+<div class="layout"><aside id="sidebar" aria-label="Documentation navigation"><a href="index.html">Documentation overview</a><a class="explorer-link" href="functions.html">⌕ Explore functions</a>{''.join(links)}
 <div class="snapshot">Documentation snapshot<br><strong>{html.escape(manifest['updated'])}</strong></div></aside>
-<main id="main">{body}<footer>Independent research by Cameron Storer. Documentation of a work in progress.
+<main id="main">{body}</main></div><footer class="site-footer"><div class="footer-inner"><div><a class="brand" href="https://mkdsrust.com"><img src="assets/icon.png" width="26" height="26" alt=""><span class="wordmark">MKDS<span>rust</span></span></a><p>A fan-made native PC port of Mario Kart DS, built from your own cartridge.</p></div><div><p class="eyebrow">Project</p><a href="https://mkdsrust.com/download">Download</a><a href="https://mkdsrust.com/mods">Mods</a><a href="https://github.com/CameronStorer/MKDSrust">Source on GitHub</a></div><div><p class="eyebrow">Documentation</p><a href="index.html">Overview</a><a href="guides--status.html">Project status</a><a href="functions.html">Function explorer</a></div></div><div class="footer-notices">Independent research by Cameron Storer. Documentation of a work in progress.
 <br>Not affiliated with Nintendo. MKDS and associated names belong to their respective owners.
-</footer></main></div></body></html>'''
+<p>Code <a href="https://github.com/CameronStorer/MKDSrust/blob/main/LICENSE">GPL-3.0</a>, docs <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</p></div></footer></body></html>'''
 
 
 def rewrite_links(rendered, source, documents):
@@ -123,7 +122,7 @@ def build():
         rendered = rendered.replace('src="figure8_simulation.png"', 'src="assets/figure8_simulation.png"')
         rendered = rendered.replace('<table>', '<div class="table-scroll"><table>')
         rendered = rendered.replace('</table>', '</table></div>')
-        toc = f'<details class="page-toc"><summary>On this page</summary>{page_toc}</details>' if page_toc else ''
+        toc = f'<details class="page-toc" open><summary>On this page</summary>{page_toc}</details>' if page_toc else ''
         archive_note = '<div class="notice">Historical research snapshot. For current MKDSrust progress, read <a href="guides--status.html">Project status</a>.</div>' if p['group'] == 'Research archive' else ''
         if p['group'] == 'Source reports':
             archive_note = '<div class="notice">Dated technical evidence, including planned work. Read <a href="guides--status.html">Project status</a> for the current summary.</div>'
@@ -139,7 +138,7 @@ def build():
     counts = Counter(p['status'] for p in functions)
     counts['annotated'] = counts['known'] + counts['described']
     cards = ''.join(f'<div class="stat"><strong>{counts[s]:,}</strong><span>{label}</span></div>' for s, label in [('annotated', 'Recorded meanings'), ('inferred', 'Inferred areas'), ('sdk', 'SDK classifications'), ('unknown', 'Still unknown')])
-    overview = f'''<section class="title-screen" aria-label="MKDSrust introduction"><div class="title-screen-copy"><img class="hero-logo" src="assets/logo.svg" width="640" height="160" alt="MKDSrust"><div class="eyebrow">MKDSrust / Lift the code. Keep the drift.</div>
+    overview = f'''<section class="title-screen" aria-label="MKDSrust introduction"><div class="title-screen-copy"><div class="eyebrow">MKDSrust / Lift the code. Keep the drift.</div>
 <h1>Your game.<br><span class="muted">A new way to understand it.</span></h1>
 <p class="lead">Turn your own lawful MKDS cartridge dump into a native game and a Rust source workspace. Explore how it works and how the research is checked. No ROM or game download is supplied.</p>
 <div class="hero-actions"><a class="button" href="guides--status.html">Project status</a><a class="text-link" href="guides--start.html">What is MKDSrust?</a></div></div></section>
