@@ -43,10 +43,11 @@ def frame(title, body, active=''):
 <title>{html.escape(title)} · MKDSrust</title><meta name="description" content="MKDSrust documentation: build and mod your own copy, study static recompilation, and follow project progress.">
 
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
-<link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
+<script>try{{var t=localStorage.getItem("theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}}catch(e){{}}</script><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/style.css?v={versions['style.css']}"><link rel="stylesheet" href="assets/theme.css?v={versions['theme.css']}"><script src="assets/site.js?v={versions['site.js']}" defer></script></head>
 <body><a class="skip" href="#main">Skip to content</a>
 <header><div class="header-inner"><a class="brand" href="https://mkdsrust.com" aria-label="MKDSrust home"><img src="assets/icon.png" width="30" height="30" alt=""><span class="wordmark">MKDS<span>rust</span></span></a>
 <nav aria-label="Primary"><a href="https://mkdsrust.com/download">Download</a><a href="https://mkdsrust.com/mods">Mods</a><a href="https://docs.mkdsrust.com" aria-current="page">Docs</a><a href="https://github.com/CameronStorer/MKDSrust">GitHub</a></nav>
+<button id="theme-toggle" type="button" aria-label="Colour theme">System</button>
 <button id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Docs menu</button></div></header>
 <div class="layout"><aside id="sidebar" aria-label="Documentation navigation"><a href="index.html">Documentation overview</a><a class="explorer-link" href="functions.html">⌕ Explore functions</a>{''.join(links)}
 <div class="snapshot">Documentation snapshot<br><strong>{html.escape(manifest['updated'])}</strong></div></aside>

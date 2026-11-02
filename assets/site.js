@@ -129,3 +129,21 @@ for (const pre of document.querySelectorAll('article.prose pre')) {
   });
   pre.appendChild(button);
 }
+
+// Theme: System -> Light -> Dark, remembered per browser (applied before paint by the head script).
+(() => {
+  const btn = document.querySelector("#theme-toggle");
+  if (!btn) return;
+  const order = ["system", "light", "dark"], label = { system: "System", light: "Light", dark: "Dark" };
+  const current = () => document.documentElement.getAttribute("data-theme") || "system";
+  const show = () => { btn.textContent = label[current()]; btn.setAttribute("aria-label", `Colour theme: ${label[current()]}. Click to change.`); };
+  btn.addEventListener("click", () => {
+    const next = order[(order.indexOf(current()) + 1) % 3];
+    if (next === "system") document.documentElement.removeAttribute("data-theme"); else document.documentElement.setAttribute("data-theme", next);
+    try { next === "system" ? localStorage.removeItem("theme") : localStorage.setItem("theme", next); } catch {}
+    show();
+  });
+  show();
+})();
+// GitHub and other external links open in a new tab.
+document.querySelectorAll('a[href^="https://github.com"]').forEach((a) => { a.target = "_blank"; a.rel = "noopener noreferrer"; });
