@@ -1,6 +1,6 @@
 # Lua scripting for MKDSrust mods: design (draft for review)
 
-Status: proposal, 2026-11-03. Nothing implemented yet.
+Status: decided 2026-11-03 (see Decisions). Step 1 implemented: `2_native_game/native/src/scripting.rs`.
 
 ## Goal
 Let modders change gameplay with small, safe scripts, without Rust, compiling or rebuilding the game. Examples:
@@ -93,7 +93,18 @@ changes and can override them. The manifest can declare `conflicts` as today.
 4. Bump the package format to v2 (`scripts`, `api`), update launcher, site screening and docs together.
 5. Hand the Toolbox Code workspace to Codex.
 
-## Open questions for the owner
-1. Luau (recommended) or plain Lua 5.4? Lua 5.4 is more familiar but harder to sandbox and has no types.
-2. Should raw `mem` be allowed in published mods (badged), or only locally?
-3. Are online/multiplayer-affecting scripts out of scope for now (assumed yes)?
+## Decisions (owner delegated, 2026-11-03; can be revisited)
+1. **Luau**, through `mlua` (vendored). It builds with the launcher's portable llvm-mingw toolchain (clang++).
+2. Raw `mem` is **allowed in published mods**, with a "uses raw memory" badge on the site and in the launcher.
+3. Online and multiplayer effects are **out of scope** for scripts for now.
+
+## Step 1 as built
+`--script FILE` (repeatable) and enabled mods' `scripts/*.luau` are loaded at start. Each runs in its own sandboxed
+VM, with a 2 ms per-frame CPU budget and a 16 MB memory limit. A failing or runaway script is switched off with a log
+line. API so far:
+- `game.on("frame", f)`, `game.frame()`, `game.scene()`;
+- `race.racers()` (index, x, y, z, is_player);
+- `race.player()` (x, y, z, lap, place, ticks);
+- `log(...)`.
+
+Tests cover the sandbox (no `io`/`os`/`require`, frozen API tables), limits and errors.
