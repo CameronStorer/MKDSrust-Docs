@@ -3,6 +3,9 @@
 Owner direction (2026-10-27): finish the NDS ROM -> source pipeline. The hand port is out of scope.
 
 ## Where we are
+> **Current plan (2026-11-10):** [Roadmap: from decomp to portable source](ROADMAP_DECOMP_TO_PORTS.md).
+> Recomp complete; decomp (T2) 81.3%; readable Rust (T3) barely started.
+
 | Block | State |
 |---|---|
 | 1. Translate the ROM's code to Rust, with no interpreter | Done. 11,297 ARM9 functions plus the ARM7 program. A race runs to the results screen with 0 interpreted instructions |
