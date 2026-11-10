@@ -9,6 +9,13 @@ Owner decision, 2026-11-10. This replaces earlier priorities for code work; the 
 | Decomp (every function named and typed, "T2") | **81.3%** (10,360 / 12,736), measured 2026-11-03 |
 | Readable Rust (no simulated DS, "T3") | **Barely started.** 3,474 functions have a direct form; none is free of the simulated CPU and memory |
 
+## Scope (owner decision, 2026-11-10)
+- **ARM7 code (1,109 functions) is out of scope for readable source.** Native builds already replace it with
+  native services (sound driver, ARM7 HLE). Converting it would be wasted work. Names stay as they are.
+- **The online area (`code_net`, 2,185 functions) is parked.** Nintendo's servers closed in 2014; online play needs a
+  new service anyway. Names stay best guesses; no conversion.
+- Both metrics print an "in scope" figure over the remaining 9,451 functions.
+
 ## The four stages
 1. **Finish the decomp (T2).** Name and type every function. Dictionary batches, done by agents, merged and
    checked by a build and the race.
