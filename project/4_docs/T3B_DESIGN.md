@@ -1,4 +1,9 @@
-# T3b "no simulated memory": design (draft for owner review)
+# T3b "no simulated memory": design
+
+> **Approved by the owner, 2026-11-10, as recommended:** T3b = M2 (one byte arena, typed opaque pointers, no
+> addresses in the source; M3 real structs optional and later); pilots sys_math → kart physics → items; only the
+> dead-stack mask may differ in `frame_compare`; a separate "T3b-pending" tier in `t3_metric.py`; hardware traits in
+> a new `platform` crate.
 
 Status: proposal, 2026-11-09. Nothing here has been built. It follows the roadmap's parity rule
 (`4_docs/ROADMAP_DECOMP_TO_PORTS.md`): game logic stays identical and fixed-point, presentation is free to change,
