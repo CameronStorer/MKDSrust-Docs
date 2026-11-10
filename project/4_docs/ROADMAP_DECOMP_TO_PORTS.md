@@ -24,6 +24,15 @@ USA version: 11,498 / 11,498 functions matched. The owner has the creator's perm
 - **We don't copy its code:** no C function bodies are translated into our repo. Our repo stays "generated on the
   user's machine from their ROM, plus our own dictionary". Conversion agents may read its C to understand intent.
 
+## Decision: park full T3b (owner, 2026-11-10)
+Readable source for ports now exists as the tylzars/mkds C decompilation, and consoles are out of scope, so the full
+T3b conversion (about 5-8 weeks) is parked. Plan instead:
+1. Finish the decomp (names and types).
+2. The cheap readable layer: typed signatures, flags as locals, boundary calls and loop polls, turned on together and
+   verified. It still runs on the simulated DS, but reads far better for modders.
+3. Then T3b only per subsystem, when a concrete mod needs it (e.g. graphics interfaces for HD/widescreen, kart and item
+   code for AI or more karts). The approved [T3b design](T3B_DESIGN.md) stays the plan for that work.
+
 ## The four stages
 1. **Finish the decomp (T2).** Name and type every function. Dictionary batches, done by agents, merged and
    checked by a build and the race.
