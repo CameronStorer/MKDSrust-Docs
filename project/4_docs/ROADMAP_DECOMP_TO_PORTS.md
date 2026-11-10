@@ -16,6 +16,14 @@ Owner decision, 2026-11-10. This replaces earlier priorities for code work; the 
   new service anyway. Names stay best guesses; no conversion.
 - Both metrics print an "in scope" figure over the remaining 9,451 functions.
 
+## Reference: the tylzars/mkds matching decompilation (owner decision, 2026-11-10)
+[tylzars/mkds](https://github.com/tylzars/mkds) (MIT, Tyler Zars and RonyxDumb) is a matching C decompilation of the
+USA version: 11,498 / 11,498 functions matched. The owner has the creator's permission to use its findings.
+- **We use its facts:** function names, struct layouts and field names, and function signatures, merged into our
+  dictionary with credit. They finish naming and typing (stage 1) and give stage 2 exact types and signatures.
+- **We don't copy its code:** no C function bodies are translated into our repo. Our repo stays "generated on the
+  user's machine from their ROM, plus our own dictionary". Conversion agents may read its C to understand intent.
+
 ## The four stages
 1. **Finish the decomp (T2).** Name and type every function. Dictionary batches, done by agents, merged and
    checked by a build and the race.
