@@ -1,7 +1,7 @@
 # Meet MKDSrust
 <!-- For everyone -->
 
-MKDSrust turns a cartridge owner's own MKDS game dump into a native program and a Rust source workspace. It exists to preserve playability, study behavior and make room for modding. The tools translate locally; the game is not supplied.
+MKDSrust lets you play Mario Kart DS natively on Windows, and mod it. It turns a cartridge owner's own game dump into a native program and a Rust source workspace, and compiles the mods you pick straight into it. The tools translate locally; the game is not supplied.
 
 A **decompilation** tries to turn machine instructions back into understandable source. **Static recompilation** translates those instructions before you play, then compiles them for your computer. MKDSrust starts with a faithful translation and progressively makes it more readable. It is still a work in progress.
 
@@ -13,6 +13,6 @@ A **decompilation** tries to turn machine instructions back into understandable 
 - [Glossary](glossary.md) and [FAQ](faq.md).
 
 ## Your copy stays yours
-You must own the game and make your own lawful dump. The project supplies tools and original research metadata, with no Nintendo code, ROM or game assets. Generated source, extracted files and built bundles are personal-use outputs and must not be redistributed. This is the project's distribution boundary, not a blanket legal ruling for every jurisdiction. MKDSrust is independent of Nintendo. The reviewed checkout has no top-level license declaration; do not infer redistribution rights for its tools.
+You must own the game and make your own lawful dump. The project supplies tools and original research metadata, with no Nintendo code, ROM or game assets. Generated source, extracted files and built bundles are personal-use outputs and must not be redistributed. This is the project's distribution boundary, not a blanket legal ruling for every jurisdiction. MKDSrust is independent of Nintendo. The project's own code is GPL-3.0-or-later and these docs are CC BY-SA 4.0; neither license covers Nintendo material or anything generated from your ROM.
 
 Source: [project README](https://github.com/CameronStorer/MKDSrust/blob/main/README.md).

@@ -33,6 +33,16 @@ T3b conversion (about 5-8 weeks) is parked. Plan instead:
 3. Then T3b only per subsystem, when a concrete mod needs it (e.g. graphics interfaces for HD/widescreen, kart and item
    code for AI or more karts). The approved [T3b design](T3B_DESIGN.md) stays the plan for that work.
 
+## Direction update (owner, 2026-11-11)
+- **Positioning:** MKDSrust is about playing MKDS natively on Windows and modding it. The tylzars/mkds C decompilation already
+  serves people porting the game to other hardware, so ports are not our goal.
+- **Readable Rust continues only through the flat-memory route:** a 32-bit build with the DS memory at its real addresses,
+  so c2rust output of the tylzars C runs natively on that memory (no simulated CPU or memory bus), with our generated code as
+  the fallback. It replaces the earlier plan of routing converted code through the `Bus`. A feasibility test (32-bit build
+  with an identical race, then one converted file swapped in) decides whether it goes ahead.
+- **Next mod:** Single Screen, as a layout option of the Widescreen mod.
+- **Paused:** the Toolbox and the mod hub.
+
 ## The four stages
 1. **Finish the decomp (T2).** Name and type every function. Dictionary batches, done by agents, merged and
    checked by a build and the race.
